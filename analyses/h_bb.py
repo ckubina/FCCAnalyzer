@@ -111,11 +111,7 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("electrons_all_q_cut0", "", *bins_charge), "electrons_all_q"))
     results.append(df.Histo1D(("electrons_all_no_cut0", "", *bins_count), "electrons_all_no"))
 
-    results.append(df.Histo1D(("photons_p", "", *bins_p), "photons_p"))
-    results.append(df.Histo1D(("photons_n", "", *bins_count), "photons_n"))
-    results.append(df.Histo1D(("photon_leading_costheta", "", *bins_cosThetaMiss), "photon_leading_costheta"))
-    results.append(df.Histo1D(("photon_leading_p", "", *bins_p), "photon_leading_p"))
-
+    
     #########
     ### CUT 0: all events
     #########
