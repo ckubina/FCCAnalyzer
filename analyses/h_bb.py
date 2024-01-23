@@ -137,7 +137,7 @@ def build_graph(df, dataset):
 
     # build the Z resonance based on the available muons. Returns the best muon pair compatible with the Z mass and recoil at 125 GeV
     # technically, it returns a ReconstructedParticleData object with index 0 the di-lepton system (Z), index and 2 the leptons of the pair
-    df = df.Define("hbuilder_result", "FCCAnalyses::resonanceBuilder_mass_recoil(91.2, 125, 0, 240, false)(muons, MCRecoAssociations0, MCRecoAssociations1, ReconstructedParticles, Particle, Particle0, Particle1)")
+df = df.Define("hbuilder_result", "FCCAnalyses::resonanceBuilder_mass_recoil(91.2, 125, 0, 240, false)(muons, MCRecoAssociations0, MCRecoAssociations1, ReconstructedParticles, Particle, Particle0, Particle1)")
     
     df = df.Filter("hbuilder_result.size() > 0")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut2"))
@@ -155,15 +155,15 @@ def build_graph(df, dataset):
     #########
     ### CUT 3: recoil cut (H mass)
     #########
-    results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "hmumu_recoil_m"))
+    results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "zmumu_recoil_m"))
     df = df.Filter("hmumu_recoil_m > 100 && hmumu_recoil_m < 150")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
 
     #####
     ### CUT 4: momentum
     #####
-    results.append(df.Histo1D(("mumu_p_nOne", "", *bins_p), "hmumu_p"))
-    df = df.Filter("hmumu_p > 20 && hmumu_p < 65")
+    results.append(df.Histo1D(("mumu_p_nOne", "", *bins_p), "zmumu_p"))
+    df = df.Filter("zmumu_p > 20 && zmumu_p < 65")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
 
 
@@ -190,8 +190,8 @@ def build_graph(df, dataset):
     ####
     ## CUT 7: acolinearity
     ####
-    df = df.Define("acoplanarity", "FCCAnalyses::acoplanarity(hmumu_leps)")
-    df = df.Define("acolinearity", "FCCAnalyses::acolinearity(hmumu_leps)")
+    df = df.Define("acoplanarity", "FCCAnalyses::acoplanarity(zmumu_leps)")
+    df = df.Define("acolinearity", "FCCAnalyses::acolinearity(zmumu_leps)")
     results.append(df.Histo1D(("acolinearity_nOne", "", *bins_aco), "acolinearity"))
     
     df = df.Filter("acolinearity > 0.05")
@@ -201,11 +201,11 @@ def build_graph(df, dataset):
     #########
     ### CUT 8 :cut on Z mass
     #########
-    results.append(df.Histo1D(("hmumu_m_nOne", "", *bins_m), "hmumu_m"))
-    df = df.Filter("hmumu_m > 80 && hmumu_m < 100")
+    results.append(df.Histo1D(("zmumu_m_nOne", "", *bins_m), "zmumu_m"))
+    df = df.Filter("zmumu_m > 80 && zmumu_m < 100")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut8"))
 
-    results.append(df.Histo1D(("hmumu_m", "", *bins_m_zoom), "hmumu_m"))
+    results.append(df.Histo1D(("zmumu_m", "", *bins_m_zoom), "zmumu_m"))
 
     results.append(df.Histo1D(("muons_no", "", *bins_count), "muons_no"))
     results.append(df.Histo1D(("electrons_no", "", *bins_count), "electrons_no"))
@@ -254,9 +254,8 @@ if __name__ == "__main__":
 
     datadict = functions.get_datadicts() # get default datasets
 
-    datasets_sig = ["wzp6_ee_nunuH_Hmumu_ecm240", "wzp6_ee_eeH_Hmumu_ecm240", "wzp6_ee_tautauH_Hmumu_ecm240", "wzp6_ee_ccH_Hmumu_ecm240", "wzp6_ee_bbH_Hmumu_ecm240", "wzp6_ee_qqH_Hmumu_ecm240", "wzp6_ee_ssH_Hmumu_ecm240", "wzp6_ee_mumuH_Hmumu_ecm240"]
-    datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240", "p8_ee_ZZ_ecm240_ext", "wzp6_ee_mumu_ecm240", "wzp6_ee_tautau_ecm240", "wzp6_egamma_eZ_Zmumu_ecm240", "wzp6_gammae_eZ_Zmumu_ecm240", "wzp6_gaga_mumu_60_ecm240", "wzp6_gaga_tautau_60_ecm240", "wzp6_ee_nuenueZ_ecm240"]
-
+    datasets_sig = ["wzp6_ee_nunuH_Hbb_ecm240", "wzp6_ee_eeH_Hbb_ecm240", "wzp6_ee_tautauH_Hbb_ecm240", "wzp6_ee_ccH_Hbb_ecm240", "wzp6_ee_mumuH_Hbb_ecm240", "wzp6_ee_qqH_Hbb_ecm240", "wzp6_ee_ssH_Hbb_ecm240", "wzp6_ee_bbH_Hbb_ecm240"]
+    datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240"]
     datasets_to_run = datasets_sig + datasets_bkg
 
     functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_mumu_40GeV_kkmcee.root", args, norm=True, lumi=7200000)
