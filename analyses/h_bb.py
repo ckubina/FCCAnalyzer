@@ -156,7 +156,7 @@ df = df.Define("hbuilder_result", "FCCAnalyses::resonanceBuilder_mass_recoil(91.
     ### CUT 3: recoil cut (H mass)
     #########
     results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "zmumu_recoil_m"))
-    df = df.Filter("hmumu_recoil_m > 100 && hmumu_recoil_m < 150")
+    df = df.Filter("zmumu_recoil_m > 100 && zmumu_recoil_m < 150")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
 
     #####
@@ -258,4 +258,4 @@ if __name__ == "__main__":
     datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240"]
     datasets_to_run = datasets_sig + datasets_bkg
 
-    functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_mumu_40GeV_kkmcee.root", args, norm=True, lumi=7200000)
+    functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_bb_40GeV_kkmcee.root", args, norm=True, lumi=7200000)
