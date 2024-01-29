@@ -1,4 +1,3 @@
-c
 import functions
 import helper_tmva
 import helpers
