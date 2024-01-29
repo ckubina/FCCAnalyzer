@@ -20,7 +20,7 @@ functions.add_include_file("analyses/higgs_mass_xsec/functions_gen.h")
 
 bins_m = (250, 0, 250)
 bins_p = (200, 0, 200)
-bins_m_zoom = (200, 80, 100) # 100 MeV
+bins_m_zoom = (200, 110, 130) # 100 MeV
 
 
 bins_theta = (500, 0, 5)
@@ -121,6 +121,7 @@ def build_graph(df, dataset):
     ### CUT 1: veto electrons
     #########
     df = df.Filter("electrons_no == 0")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut1"))
 
     #########
     ### CUT 2: at least 2 OS muons, forming resonance
