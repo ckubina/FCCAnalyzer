@@ -153,14 +153,14 @@ def build_graph(df, dataset):
     ### CUT 3: recoil cut (H mass)
     #########
     results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "zmumu_recoil_m"))
-    df = df.Filter("zmumu_recoil_m > 100 && zmumu_recoil_m < 150")
+    df = df.Filter("zmumu_recoil_m > 122 && zmumu_recoil_m < 127")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
 
     #####
     ### CUT 4: momentum
     #####
     results.append(df.Histo1D(("mumu_p_nOne", "", *bins_p), "zmumu_p"))
-    df = df.Filter("zmumu_p > 20 && zmumu_p < 65")
+    df = df.Filter("zmumu_p > 27 && zmumu_p < 78")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
 
 
@@ -199,7 +199,7 @@ def build_graph(df, dataset):
     ### CUT 8 :cut on Z mass
     #########
     results.append(df.Histo1D(("zmumu_m_nOne", "", *bins_m), "zmumu_m"))
-    df = df.Filter("zmumu_m > 80 && zmumu_m < 100")
+    df = df.Filter("zmumu_m > 86 && zmumu_m < 93")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut8"))
 
     results.append(df.Histo1D(("zmumu_m", "", *bins_m_zoom), "zmumu_m"))
