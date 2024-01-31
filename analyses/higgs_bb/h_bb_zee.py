@@ -179,7 +179,7 @@ def build_graph(df, dataset):
     ## CUT 6: missing energy
     ####
     results.append(df.Histo1D(("missingEnergy_nOne", "", *bins_m), "missingEnergy"))
-    df = df.Filter("missingEnergy < 115 && (missingEnergy > 95 || missingEnergy < 30 )")
+    df = df.Filter("missingEnergy < 30 )")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
 
 
