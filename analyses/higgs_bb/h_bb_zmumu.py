@@ -160,7 +160,7 @@ def build_graph(df, dataset):
     ### CUT 4: momentum
     #####
     results.append(df.Histo1D(("mumu_p_nOne", "", *bins_p), "zmumu_p"))
-    df = df.Filter("zmumu_p > 27 && zmumu_p < 78")
+    df = df.Filter("zmumu_p > 35 && zmumu_p < 65")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
 
 
