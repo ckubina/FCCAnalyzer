@@ -199,7 +199,7 @@ def build_graph(df, dataset):
     ### CUT 8 :cut on Z mass
     #########
     results.append(df.Histo1D(("zmumu_m_nOne", "", *bins_m), "zmumu_m"))
-    df = df.Filter("zmumu_m > 86 && zmumu_m < 93")
+    df = df.Filter("zmumu_m > 83 && zmumu_m < 100")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut8"))
 
     results.append(df.Histo1D(("zmumu_m", "", *bins_m_zoom), "zmumu_m"))
