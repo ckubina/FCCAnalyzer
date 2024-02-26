@@ -126,6 +126,8 @@ def build_graph(df, dataset):
     #########
     ### CUT 2: at least 2 OS muons, forming resonance
     #########
+    #Make histogram of muon numbers
+    #cut
     df = df.Filter("muons_no >= 2")
     df = df.Define("muon1_p", "muons_p[0]")
     df = df.Define("muon2_p", "muons_p[1]")
@@ -135,7 +137,9 @@ def build_graph(df, dataset):
     # build the Z resonance based on the available muons. Returns the best muon pair compatible with the Z mass and recoil at 125 GeV
     # technically, it returns a ReconstructedParticleData object with index 0 the di-lepton system (Z), index and 2 the leptons of the pair
     df = df.Define("hbuilder_result", "FCCAnalyses::resonanceBuilder_mass_recoil(91.2, 125, 0, 240, false)(muons, MCRecoAssociations0, MCRecoAssociations1, ReconstructedParticles, Particle, Particle0, Particle1)")
-    
+
+    #Make histogram of hbuilder_result.size()
+    #cut
     df = df.Filter("hbuilder_result.size() > 0")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut2"))
 
