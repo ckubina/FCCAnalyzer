@@ -243,7 +243,7 @@ def build_graph(df, dataset):
     # df = df.Define("jets_m", "FCCAnalyses::JetClusteringUtils::get_m(jets)")
 
     #Flavour tagging
-    df = jetClusteringHelper.define(df)
+    df = jetClusteringHelper2.define(df)
     df = jetFlavourHelper.define_and_inference(df)
     df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
     results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
