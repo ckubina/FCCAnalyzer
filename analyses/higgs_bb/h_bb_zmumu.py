@@ -276,13 +276,9 @@ def build_graph(df, dataset):
 
     results.append(df.Histo1D(("recojet_isC_jet0", "", *bins_score), "recojet_isC_jet0"))
     results.append(df.Histo1D(("recojet_isC_jet1", "", *bins_score), "recojet_isC_jet1"))
-    results.append(df.Histo1D(("recojet_isC_jet2", "", *bins_score), "recojet_isC_jet2"))
-    results.append(df.Histo1D(("recojet_isC_jet3", "", *bins_score), "recojet_isC_jet3"))
 
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
-    results.append(df.Histo1D(("recojet_isB_jet2", "", *bins_score), "recojet_isB_jet2"))
-    results.append(df.Histo1D(("recojet_isB_jet3", "", *bins_score), "recojet_isB_jet3"))
 
     df = df.Define("jet1", "ROOT::Math::PxPyPzEVector(jets_px[0], jets_py[0], jets_pz[0], jets_e[0])")
     df = df.Define("jet2", "ROOT::Math::PxPyPzEVector(jets_px[1], jets_py[1], jets_pz[1], jets_e[1])")
