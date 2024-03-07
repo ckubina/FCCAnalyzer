@@ -2,6 +2,7 @@
 import functions
 import helpers
 import ROOT
+ROOT.gROOT.SetBatch()
 import argparse
 import logging
 
