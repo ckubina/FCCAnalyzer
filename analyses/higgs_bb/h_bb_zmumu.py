@@ -46,7 +46,12 @@ bins_cosThetaMiss = (10000, 0, 1)
 
 bins_dR = (1000, 0, 10)
 
-
+#jet clustering applications
+njets = 2 # number of jets to be clustered
+jetClusteringHelper = helper_jetclustering.ExclusiveJetClusteringHelper(njets, collection="ReconstructedParticles")
+jetFlavourHelper = helper_flavourtagger.JetFlavourHelper(jetClusteringHelper.jets, jetClusteringHelper.constituents)
+path = "data/flavourtagger/fccee_flavtagging_edm4hep_wc_v1"
+jetFlavourHelper.load(f"{path}.json", f"{path}.onnx")
 
 def build_graph(df, dataset):
 
@@ -225,14 +230,21 @@ def build_graph(df, dataset):
     df = df.Define("RP_q", "FCCAnalyses::ReconstructedParticle::get_charge(rps_no_muons)")
     df = df.Define("pseudo_jets", "FCCAnalyses::JetClusteringUtils::set_pseudoJets(RP_px, RP_py, RP_pz, RP_e)")
 
-    df = df.Define("clustered_jets", "JetClustering::clustering_ee_kt(2, 2, 1, 0)(pseudo_jets)")
-    df = df.Define("jets", "FCCAnalyses::JetClusteringUtils::get_pseudoJets(clustered_jets)")
-    df = df.Define("jetconstituents", "FCCAnalyses::JetClusteringUtils::get_constituents(clustered_jets)")
-    df = df.Define("jets_e", "FCCAnalyses::JetClusteringUtils::get_e(jets)")
-    df = df.Define("jets_px", "FCCAnalyses::JetClusteringUtils::get_px(jets)")
-    df = df.Define("jets_py", "FCCAnalyses::JetClusteringUtils::get_py(jets)")
-    df = df.Define("jets_pz", "FCCAnalyses::JetClusteringUtils::get_pz(jets)")
-    df = df.Define("jets_m", "FCCAnalyses::JetClusteringUtils::get_m(jets)")
+    #df = df.Define("clustered_jets", "JetClustering::clustering_ee_kt(2, 2, 1, 0)(pseudo_jets)")
+    # df = df.Define("jets", "FCCAnalyses::JetClusteringUtils::get_pseudoJets(clustered_jets)")
+    # df = df.Define("jetconstituents", "FCCAnalyses::JetClusteringUtils::get_constituents(clustered_jets)")
+    # df = df.Define("jets_e", "FCCAnalyses::JetClusteringUtils::get_e(jets)")
+    # df = df.Define("jets_px", "FCCAnalyses::JetClusteringUtils::get_px(jets)")
+    # df = df.Define("jets_py", "FCCAnalyses::JetClusteringUtils::get_py(jets)")
+    # df = df.Define("jets_pz", "FCCAnalyses::JetClusteringUtils::get_pz(jets)")
+    # df = df.Define("jets_m", "FCCAnalyses::JetClusteringUtils::get_m(jets)")
+
+    #Flavour tagging
+    df = jetClusteringHelper.define(df)
+    df = jetFlavourHelper.define_and_inference(df)
+    df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
+    results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
+    results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
 
     df = df.Define("jet1", "ROOT::Math::PxPyPzEVector(jets_px[0], jets_py[0], jets_pz[0], jets_e[0])")
     df = df.Define("jet2", "ROOT::Math::PxPyPzEVector(jets_px[1], jets_py[1], jets_pz[1], jets_e[1])")
@@ -245,7 +257,10 @@ def build_graph(df, dataset):
     
     
     results.append(df.Histo1D(("hqq_m", "", *bins_m), "dijet_m"))
-    
+
+    #Add flavour tagging here?
+    #If 2 jets.. flavour tag
+    #make b cut
     
 
     return results, weightsum
