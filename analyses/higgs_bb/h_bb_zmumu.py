@@ -280,8 +280,8 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
 
-    df = df.Define("jet1", "ROOT::Math::PxPyPzEVector(jets_px[0], jets_py[0], jets_pz[0], jets_e[0])")
-    df = df.Define("jet2", "ROOT::Math::PxPyPzEVector(jets_px[1], jets_py[1], jets_pz[1], jets_e[1])")
+    df = df.Define("jet1", "ROOT::Math::PxPyPzEVector(jet_px[0], jet_py[0], jet_pz[0], jet_e[0])")
+    df = df.Define("jet2", "ROOT::Math::PxPyPzEVector(jet_px[1], jet_py[1], jet_pz[1], jet_e[1])")
     df = df.Define("jet1_p", "jet1.P()")
     df = df.Define("jet2_p", "jet2.P()")
     df = df.Define("dijet", "jet1+jet2")
