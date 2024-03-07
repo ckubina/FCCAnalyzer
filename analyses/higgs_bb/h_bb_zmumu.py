@@ -20,6 +20,7 @@ functions.add_include_file("analyses/higgs_mass_xsec/functions_gen.h")
 
 
 # define histograms
+bins_score = (100, 0, 1)
 
 bins_m = (250, 0, 250)
 bins_p = (200, 0, 200)
