@@ -279,14 +279,14 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
 
-    results.append(df.Histo1D(("recojet_isC_jet0", "", *bins_score), "recojet_isQ_jet0"))
-    results.append(df.Histo1D(("recojet_isC_jet1", "", *bins_score), "recojet_isQ_jet1"))
+    results.append(df.Histo1D(("recojet_isQ_jet0", "", *bins_score), "recojet_isQ_jet0"))
+    results.append(df.Histo1D(("recojet_isQ_jet1", "", *bins_score), "recojet_isQ_jet1"))
 
-    results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isS_jet0"))
-    results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isS_jet1"))
+    results.append(df.Histo1D(("recojet_isS_jet0", "", *bins_score), "recojet_isS_jet0"))
+    results.append(df.Histo1D(("recojet_isS_jet1", "", *bins_score), "recojet_isS_jet1"))
 
-    results.append(df.Histo1D(("recojet_isC_jet0", "", *bins_score), "recojet_isG_jet0"))
-    results.append(df.Histo1D(("recojet_isC_jet1", "", *bins_score), "recojet_isG_jet1"))
+    results.append(df.Histo1D(("recojet_isG_jet0", "", *bins_score), "recojet_isG_jet0"))
+    results.append(df.Histo1D(("recojet_isG_jet1", "", *bins_score), "recojet_isG_jet1"))
 
     df = df.Filter("recojet_isB_jet0 > 0.97 && recojet_isB_jet1 >0.97")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
