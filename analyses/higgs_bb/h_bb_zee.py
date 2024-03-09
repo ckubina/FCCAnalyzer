@@ -5,6 +5,9 @@ import ROOT
 import argparse
 import logging
 
+import helper_jetclustering
+import helper_flavourtagger
+
 logger = logging.getLogger("fcclogger")
 
 parser = functions.make_def_argparser()
