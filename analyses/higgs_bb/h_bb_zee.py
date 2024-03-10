@@ -284,12 +284,14 @@ def build_graph(df, dataset):
     df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 > 0.95")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
 
-
+    ####
+    ## This doesn't work and idk why?
+    ####
     #Do direct Higgs Mass reconstruction
     # select 2 jets with highest B score (should form the Higgs for wzp6_ee_ccH_Hbb_ecm240)
-    # df = df.Define("bjet_idx", "FCCAnalyses::getMaxAndSecondMaxIdx(recojet_isB)")
-    df = df.Define("dijet_higgs_m_reco", "(jet_tlv[0]+jet_tlv[1]).M()")
-    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_p), "dijet_higgs_m_reco")) #reconstructed higgs mass
+    df = df.Define("bjet_idx", "FCCAnalyses::getMaxAndSecondMaxIdx(recojet_isB)")
+    df = df.Define("dijet_higgs_m_reco", "(jet_tlv[bjet_idx[0]]+jet_tlv[bjet_idx[1]]).M()")
+    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_p), "dijet_higgs_m_reco"))
 
     # compare with jet-truth analysis
     df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, ReconstructedParticles, Particle, MCRecoAssociations1)")
