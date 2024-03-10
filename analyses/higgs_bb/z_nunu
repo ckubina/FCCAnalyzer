@@ -124,52 +124,13 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut1"))
 
     #########
-    ### CUT 2: at least 2 OS muons, forming resonance
+    ### CUT 2: veto electrons
     #########
-    #Make histogram of muon numbers
-    #cut
-    df = df.Filter("muons_no >= 2")
-    df = df.Define("muon1_p", "muons_p[0]")
-    df = df.Define("muon2_p", "muons_p[1]")
-    results.append(df.Histo1D(("muon1_p", "", *bins_p), "muon1_p"))
-    results.append(df.Histo1D(("muon2_p", "", *bins_p), "muon2_p"))
-
-    # build the Z resonance based on the available muons. Returns the best muon pair compatible with the Z mass and recoil at 125 GeV
-    # technically, it returns a ReconstructedParticleData object with index 0 the di-lepton system (Z), index and 2 the leptons of the pair
-    df = df.Define("hbuilder_result", "FCCAnalyses::resonanceBuilder_mass_recoil(91.2, 125, 0, 240, false)(muons, MCRecoAssociations0, MCRecoAssociations1, ReconstructedParticles, Particle, Particle0, Particle1)")
-
-    #Make histogram of hbuilder_result.size()
-    #cut
-    df = df.Filter("hbuilder_result.size() > 0")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut2"))
-
-    df = df.Define("zmumu", "ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>{hbuilder_result[0]}") # the Z
-    df = df.Define("zmumu_tlv", "FCCAnalyses::makeLorentzVectors(zmumu)")
-    df = df.Define("zmumu_leps", "ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>{hbuilder_result[1],hbuilder_result[2]}") # the muons
-    df = df.Define("zmumu_leps_tlv", "FCCAnalyses::makeLorentzVectors(zmumu_leps)")
-    df = df.Define("zmumu_m", "FCCAnalyses::ReconstructedParticle::get_mass(zmumu)[0]")
-    df = df.Define("zmumu_p", "FCCAnalyses::ReconstructedParticle::get_p(zmumu)[0]")
-    df = df.Define("zmumu_recoil", "FCCAnalyses::ReconstructedParticle::recoilBuilder(240)(zmumu)")
-    df = df.Define("zmumu_recoil_m", "FCCAnalyses::ReconstructedParticle::get_mass(zmumu_recoil)[0]")
-
-
-    #########
-    ### CUT 3: recoil cut (H mass)
-    #########
-    results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "zmumu_recoil_m"))
-    df = df.Filter("zmumu_recoil_m > 122 && zmumu_recoil_m < 127")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
-
-    #####
-    ### CUT 4: momentum
-    #####
-    results.append(df.Histo1D(("mumu_p_nOne", "", *bins_p), "zmumu_p"))
-    df = df.Filter("zmumu_p > 35 && zmumu_p < 65")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
-
+    df = df.Filter("electrons_no == 0")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut1"))
 
     ####
-    ## CUT 5: cos theta(miss)
+    ## CUT 3: cos theta(miss)
     ####
     df = df.Define("missingEnergy_rp", "FCCAnalyses::missingEnergy(240., ReconstructedParticles)")
     df = df.Define("missingEnergy_rp_tlv", "FCCAnalyses::makeLorentzVectors(missingEnergy_rp)")
@@ -181,38 +142,11 @@ def build_graph(df, dataset):
 
 
     ####
-    ## CUT 6: missing energy
+    ## CUT 4: missing energy
     ####
     results.append(df.Histo1D(("missingEnergy_nOne", "", *bins_m), "missingEnergy"))
-    df = df.Filter("missingEnergy < 30")
+    df = df.Filter("missingEnergy > 95 && missingEnergy < 115")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
-
-
-    ####
-    ## CUT 7: acolinearity
-    ####
-    df = df.Define("acoplanarity", "FCCAnalyses::acoplanarity(zmumu_leps)")
-    df = df.Define("acolinearity", "FCCAnalyses::acolinearity(zmumu_leps)")
-    results.append(df.Histo1D(("acolinearity_nOne", "", *bins_aco), "acolinearity"))
-    
-    df = df.Filter("acolinearity > 0.05")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut7"))
-
-
-    #########
-    ### CUT 8 :cut on Z mass
-    #########
-    results.append(df.Histo1D(("zmumu_m_nOne", "", *bins_m), "zmumu_m"))
-    df = df.Filter("zmumu_m > 83 && zmumu_m < 100")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut8"))
-
-    results.append(df.Histo1D(("zmumu_m", "", *bins_m_zoom), "zmumu_m"))
-
-    results.append(df.Histo1D(("muons_no", "", *bins_count), "muons_no"))
-    results.append(df.Histo1D(("electrons_no", "", *bins_count), "electrons_no"))
-
-    results.append(df.Histo1D(("acoplanarity", "", *bins_aco), "acoplanarity"))
-    results.append(df.Histo1D(("acolinearity", "", *bins_aco), "acolinearity"))
 
 
     # define PF candidates collection by removing the muons
