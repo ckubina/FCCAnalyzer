@@ -290,17 +290,17 @@ def build_graph(df, dataset):
     #Do direct Higgs Mass reconstruction
     # select 2 jets with highest B score (should form the Higgs for wzp6_ee_ccH_Hbb_ecm240)
     # df = df.Define("bjet_idx", "FCCAnalyses::getMaxAndSecondMaxIdx(recojet_isB)")
-    df = df.Define("dijet_higgs_m_reco", "(jet_tlv[0]+jet_tlv[1]).M()")
-    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
+    # df = df.Define("dijet_higgs_m_reco", "(jet_tlv[0]+jet_tlv[1]).M()")
+    # results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
 
     # compare with jet-truth analysis
-    df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, rps_no_electrons, Particle, MCRecoAssociations1)")
-    df = df.Define("njets", f"{njets}")
-    df = df.Define("jets_higgs_mc", "FCCAnalyses::Vec_i res; for(int i=0;i<njets;i++) if(abs(jets_mc[i])==5) res.push_back(i); return res;") # assume H->bb
-    df = df.Filter("jets_higgs_mc.size()==2")
-    df = df.Define("dijet_higgs_m_mc", "(jet_tlv[jets_higgs_mc[0]]+jet_tlv[jets_higgs_mc[1]]).M()")
+    # df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, rps_no_electrons, Particle, MCRecoAssociations1)")
+    # df = df.Define("njets", f"{njets}")
+    # df = df.Define("jets_higgs_mc", "FCCAnalyses::Vec_i res; for(int i=0;i<njets;i++) if(abs(jets_mc[i])==5) res.push_back(i); return res;") # assume H->bb
+    # df = df.Filter("jets_higgs_mc.size()==2")
+    # df = df.Define("dijet_higgs_m_mc", "(jet_tlv[jets_higgs_mc[0]]+jet_tlv[jets_higgs_mc[1]]).M()")
 
-    results.append(df.Histo1D(("dijet_higgs_m_mc", "", *bins_m), "dijet_higgs_m_mc")) #monte carlo higgs mass
+    # results.append(df.Histo1D(("dijet_higgs_m_mc", "", *bins_m), "dijet_higgs_m_mc")) #monte carlo higgs mass
 
     return results, weightsum
 
