@@ -290,8 +290,8 @@ def build_graph(df, dataset):
     #Do direct Higgs Mass reconstruction
     # select 2 jets with highest B score (should form the Higgs for wzp6_ee_ccH_Hbb_ecm240)
     # df = df.Define("bjet_idx", "FCCAnalyses::getMaxAndSecondMaxIdx(recojet_isB)")
-    # df = df.Define("dijet_higgs_m_reco", "(jet_tlv[0]+jet_tlv[1]).M()")
-    # results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
+    df = df.Define("dijet_higgs_m_reco", "(jet_tlv[0]+jet_tlv[1]).M()")
+    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
 
     # compare with jet-truth analysis
     # df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, rps_no_electrons, Particle, MCRecoAssociations1)")
