@@ -244,7 +244,10 @@ def build_graph(df, dataset):
     df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
     
     if ("jet_tlv.size() < 2"):
-        print(f'Jet size is {"jet_tlv.size()"}.')
+        if ("jet_tlv.size() < 1"):
+            print("Jet size is 0.")
+        else:
+            print("Jet size is 1.")
     else:  
         results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
         results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
