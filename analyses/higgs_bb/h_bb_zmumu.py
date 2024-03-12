@@ -292,16 +292,11 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
 
     #Reconstruct the Higgs Mass
-    df = df.Define("jet1", "ROOT::Math::PxPyPzEVector(jet_px[0], jet_py[0], jet_pz[0], jet_e[0])")
-    df = df.Define("jet2", "ROOT::Math::PxPyPzEVector(jet_px[1], jet_py[1], jet_pz[1], jet_e[1])")
-    df = df.Define("jet1_p", "jet1.P()")
-    df = df.Define("jet2_p", "jet2.P()")
-    df = df.Define("dijet", "jet1+jet2")
-    df = df.Define("dijet_tlv", "TLorentzVector ret; ret.SetPxPyPzE(dijet.Px(), dijet.Py(), dijet.Pz(), dijet.E()); return ret;")
-    df = df.Define("dijet_m", "dijet.M()")
-    df = df.Define("dijet_p", "dijet.P()")
+    #df = df.Define("bjet_idx", "FCCAnalyses::getMaxAndSecondMaxIdx(recojet_isB)")
+    df = df.Define("dijet_higgs_m_reco", "(jet_tlv[0]+jet_tlv[1]).M()")
+    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_p), "dijet_higgs_m_reco"))
     
-    results.append(df.Histo1D(("hqq_m", "", *bins_m), "dijet_m"))
+    #results.append(df.Histo1D(("hqq_m", "", *bins_m), "dijet_m"))
     
     
 
