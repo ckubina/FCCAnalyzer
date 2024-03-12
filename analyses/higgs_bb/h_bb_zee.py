@@ -244,7 +244,7 @@ def build_graph(df, dataset):
     df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
     
     if ("jet_tlv.size() < 2"):
-        if ("jet_tlv.size() < 1"):
+        if ("jet_tlv.size() == 1"):
             print("Jet size is 0.")
         else:
             print("Jet size is 1.")
