@@ -243,7 +243,7 @@ def build_graph(df, dataset):
     df = jetFlavourHelper.define_and_inference(df)
     df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
     
-    if (jet_tlv.size() < 2):
+    if ("jet_tlv.size() < 2"):
         print("Jet size is less than 2.")
     else:  
         results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
