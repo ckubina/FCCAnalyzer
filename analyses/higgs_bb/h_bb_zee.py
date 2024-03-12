@@ -219,7 +219,7 @@ def build_graph(df, dataset):
 
 
     # define PF candidates collection by removing the electrons
-    df = df.Define("rps_no_electrons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, electrons)")
+    # df = df.Define("rps_no_electrons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, electrons)")
     # df = df.Define("RP_px", "FCCAnalyses::ReconstructedParticle::get_px(rps_no_electrons)")
     # df = df.Define("RP_py", "FCCAnalyses::ReconstructedParticle::get_py(rps_no_electrons)")
     # df = df.Define("RP_pz","FCCAnalyses::ReconstructedParticle::get_pz(rps_no_electrons)")
