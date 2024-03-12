@@ -284,6 +284,10 @@ def build_graph(df, dataset):
     df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 > 0.95")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
 
+    #test histograms
+    results.append(df.Histo1D(("recojet_isG_jet0", "", *bins_score), "recojet_isG_jet0"))
+    results.append(df.Histo1D(("recojet_isG_jet1", "", *bins_score), "recojet_isG_jet1"))
+
 
     #Do direct Higgs Mass reconstruction
     # select 2 jets with highest B score (should form the Higgs for wzp6_ee_ccH_Hbb_ecm240)
