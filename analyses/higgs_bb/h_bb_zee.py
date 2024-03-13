@@ -267,18 +267,10 @@ def build_graph(df, dataset):
     #Do direct Higgs Mass reconstruction
     df = df.Define("jet0", "jet_tlv[0]")
     df = df.Define("jet1", "jet_tlv[1]")
-    df = df.Define("jet0_mass", "jet0.M()")
-    df = df.Define("jet1_mass", "jet1.M()")
-    df = df.Define("jet0_p", "jet0.P()")
-    df = df.Define("jet1_p", "jet1.P()")
     df = df.Define("dijet", "jet0 + jet1")
     df = df.Define("dijet_higgs_m_reco", "dijet.M()")
-    #df = df.Define("dijet_higgs_m_reco", "cout << dijet.M() << endl; return 100;")
     df = df.Define("dijet_higgs_p_reco", "dijet.P()")
-    results.append(df.Histo1D(("jet0_mass", "", *bins_p), "jet0_mass")) #reconstructed higgs mass
-    results.append(df.Histo1D(("jet1_mass", "", *bins_p), "jet1_mass"))
-    results.append(df.Histo1D(("jet0_p", "", *bins_p), "jet0_p")) #reconstructed higgs mass
-    results.append(df.Histo1D(("jet1_p", "", *bins_p), "jet1_p"))
+    
     results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
     results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
 
