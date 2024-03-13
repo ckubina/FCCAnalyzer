@@ -17,6 +17,7 @@ functions.add_include_file("analyses/higgs_mass_xsec/functions_gen.h")
 
 
 # define histograms
+bins_score = (100, 0, 1)
 
 bins_m = (250, 0, 250)
 bins_p = (200, 0, 200)
@@ -46,7 +47,11 @@ bins_cosThetaMiss = (10000, 0, 1)
 
 bins_dR = (1000, 0, 10)
 
-
+njets = 2 # number of jets to be clustered
+jetClusteringHelper2 = helper_jetclustering.ExclusiveJetClusteringHelper(njets, collection="rps_no_electrons")
+jetFlavourHelper = helper_flavourtagger.JetFlavourHelper(jetClusteringHelper2.jets, jetClusteringHelper2.constituents)
+path = "data/flavourtagger/fccee_flavtagging_edm4hep_wc_v1"
+jetFlavourHelper.load(f"{path}.json", f"{path}.onnx")
 
 def build_graph(df, dataset):
 
@@ -123,50 +128,6 @@ def build_graph(df, dataset):
     df = df.Filter("electrons_no == 0")
     df = df.Filter("muons_no ==0")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut1"))
-    
-    #########
-    ### CUT 2: at least 2 OS muons, forming resonance
-    #########
-    #Make histogram of muon numbers
-    #cut
-    df = df.Filter("muons_no >= 2")
-    df = df.Define("muon1_p", "muons_p[0]")
-    df = df.Define("muon2_p", "muons_p[1]")
-    results.append(df.Histo1D(("muon1_p", "", *bins_p), "muon1_p"))
-    results.append(df.Histo1D(("muon2_p", "", *bins_p), "muon2_p"))
-
-    # build the Z resonance based on the available muons. Returns the best muon pair compatible with the Z mass and recoil at 125 GeV
-    # technically, it returns a ReconstructedParticleData object with index 0 the di-lepton system (Z), index and 2 the leptons of the pair
-    df = df.Define("hbuilder_result", "FCCAnalyses::resonanceBuilder_mass_recoil(91.2, 125, 0, 240, false)(muons, MCRecoAssociations0, MCRecoAssociations1, ReconstructedParticles, Particle, Particle0, Particle1)")
-
-    #Make histogram of hbuilder_result.size()
-    #cut
-    df = df.Filter("hbuilder_result.size() > 0")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut2"))
-
-    df = df.Define("zmumu", "ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>{hbuilder_result[0]}") # the Z
-    df = df.Define("zmumu_tlv", "FCCAnalyses::makeLorentzVectors(zmumu)")
-    df = df.Define("zmumu_leps", "ROOT::VecOps::RVec<edm4hep::ReconstructedParticleData>{hbuilder_result[1],hbuilder_result[2]}") # the muons
-    df = df.Define("zmumu_leps_tlv", "FCCAnalyses::makeLorentzVectors(zmumu_leps)")
-    df = df.Define("zmumu_m", "FCCAnalyses::ReconstructedParticle::get_mass(zmumu)[0]")
-    df = df.Define("zmumu_p", "FCCAnalyses::ReconstructedParticle::get_p(zmumu)[0]")
-    df = df.Define("zmumu_recoil", "FCCAnalyses::ReconstructedParticle::recoilBuilder(240)(zmumu)")
-    df = df.Define("zmumu_recoil_m", "FCCAnalyses::ReconstructedParticle::get_mass(zmumu_recoil)[0]")
-
-
-    #########
-    ### CUT 3: recoil cut (H mass)
-    #########
-    results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "zmumu_recoil_m"))
-    df = df.Filter("zmumu_recoil_m > 122 && zmumu_recoil_m < 127")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
-
-    #####
-    ### CUT 4: momentum
-    #####
-    results.append(df.Histo1D(("mumu_p_nOne", "", *bins_p), "zmumu_p"))
-    df = df.Filter("zmumu_p > 35 && zmumu_p < 65")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
 
 
     ####
@@ -185,7 +146,7 @@ def build_graph(df, dataset):
     ## CUT 6: missing energy
     ####
     results.append(df.Histo1D(("missingEnergy_nOne", "", *bins_m), "missingEnergy"))
-    df = df.Filter("missingEnergy < 30")
+    df = df.Filter("missingEnergy > 65 && missingEnergy < 115")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
 
 
