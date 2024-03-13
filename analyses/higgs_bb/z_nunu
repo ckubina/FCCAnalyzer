@@ -118,11 +118,12 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut0"))
 
     #########
-    ### CUT 1: veto electrons
+    ### CUT 1: veto electrons and muons
     #########
     df = df.Filter("electrons_no == 0")
+    df = df.Filter("muons_no ==0")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut1"))
-
+    
     #########
     ### CUT 2: at least 2 OS muons, forming resonance
     #########
