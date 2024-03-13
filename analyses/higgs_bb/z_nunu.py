@@ -48,7 +48,7 @@ bins_cosThetaMiss = (10000, 0, 1)
 bins_dR = (1000, 0, 10)
 
 njets = 2 # number of jets to be clustered
-jetClusteringHelper2 = helper_jetclustering.ExclusiveJetClusteringHelper(njets, collection="rps_no_electrons")
+jetClusteringHelper2 = helper_jetclustering.ExclusiveJetClusteringHelper(njets, collection="ReconstructedParticles")
 jetFlavourHelper = helper_flavourtagger.JetFlavourHelper(jetClusteringHelper2.jets, jetClusteringHelper2.constituents)
 path = "data/flavourtagger/fccee_flavtagging_edm4hep_wc_v1"
 jetFlavourHelper.load(f"{path}.json", f"{path}.onnx")
@@ -131,7 +131,7 @@ def build_graph(df, dataset):
 
 
     ####
-    ## CUT 5: cos theta(miss)
+    ## CUT 2: cos theta(miss)
     ####
     df = df.Define("missingEnergy_rp", "FCCAnalyses::missingEnergy(240., ReconstructedParticles)")
     df = df.Define("missingEnergy_rp_tlv", "FCCAnalyses::makeLorentzVectors(missingEnergy_rp)")
@@ -139,76 +139,78 @@ def build_graph(df, dataset):
     df = df.Define("cosTheta_miss", "FCCAnalyses::get_cosTheta_miss(missingEnergy_rp)")
     results.append(df.Histo1D(("cosThetaMiss_nOne", "", *bins_cosThetaMiss), "cosTheta_miss"))
     df = df.Filter("cosTheta_miss < 0.98")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut5"))
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut2"))
 
 
     ####
-    ## CUT 6: missing energy
+    ## CUT 3: missing energy
     ####
     results.append(df.Histo1D(("missingEnergy_nOne", "", *bins_m), "missingEnergy"))
     df = df.Filter("missingEnergy > 65 && missingEnergy < 115")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
-
-
-    ####
-    ## CUT 7: acolinearity
-    ####
-    df = df.Define("acoplanarity", "FCCAnalyses::acoplanarity(zmumu_leps)")
-    df = df.Define("acolinearity", "FCCAnalyses::acolinearity(zmumu_leps)")
-    results.append(df.Histo1D(("acolinearity_nOne", "", *bins_aco), "acolinearity"))
-    
-    df = df.Filter("acolinearity > 0.05")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut7"))
-
-
-    #########
-    ### CUT 8 :cut on Z mass
-    #########
-    results.append(df.Histo1D(("zmumu_m_nOne", "", *bins_m), "zmumu_m"))
-    df = df.Filter("zmumu_m > 83 && zmumu_m < 100")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut8"))
-
-    results.append(df.Histo1D(("zmumu_m", "", *bins_m_zoom), "zmumu_m"))
-
-    results.append(df.Histo1D(("muons_no", "", *bins_count), "muons_no"))
-    results.append(df.Histo1D(("electrons_no", "", *bins_count), "electrons_no"))
-
-    results.append(df.Histo1D(("acoplanarity", "", *bins_aco), "acoplanarity"))
-    results.append(df.Histo1D(("acolinearity", "", *bins_aco), "acolinearity"))
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
 
 
     # define PF candidates collection by removing the muons
-    df = df.Define("rps_no_muons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, muons)")
-    df = df.Define("RP_px", "FCCAnalyses::ReconstructedParticle::get_px(rps_no_muons)")
-    df = df.Define("RP_py", "FCCAnalyses::ReconstructedParticle::get_py(rps_no_muons)")
-    df = df.Define("RP_pz","FCCAnalyses::ReconstructedParticle::get_pz(rps_no_muons)")
-    df = df.Define("RP_e", "FCCAnalyses::ReconstructedParticle::get_e(rps_no_muons)")
-    df = df.Define("RP_m", "FCCAnalyses::ReconstructedParticle::get_mass(rps_no_muons)")
-    df = df.Define("RP_q", "FCCAnalyses::ReconstructedParticle::get_charge(rps_no_muons)")
-    df = df.Define("pseudo_jets", "FCCAnalyses::JetClusteringUtils::set_pseudoJets(RP_px, RP_py, RP_pz, RP_e)")
+    # df = df.Define("rps_no_muons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, muons)")
+    # df = df.Define("RP_px", "FCCAnalyses::ReconstructedParticle::get_px(rps_no_muons)")
+    # df = df.Define("RP_py", "FCCAnalyses::ReconstructedParticle::get_py(rps_no_muons)")
+    # df = df.Define("RP_pz","FCCAnalyses::ReconstructedParticle::get_pz(rps_no_muons)")
+    # df = df.Define("RP_e", "FCCAnalyses::ReconstructedParticle::get_e(rps_no_muons)")
+    # df = df.Define("RP_m", "FCCAnalyses::ReconstructedParticle::get_mass(rps_no_muons)")
+    # df = df.Define("RP_q", "FCCAnalyses::ReconstructedParticle::get_charge(rps_no_muons)")
+    # df = df.Define("pseudo_jets", "FCCAnalyses::JetClusteringUtils::set_pseudoJets(RP_px, RP_py, RP_pz, RP_e)")
+    
+    
+    #Flavour tagging and jet clustering
+    df = jetClusteringHelper2.define(df)
+    df = jetFlavourHelper.define_and_inference(df)
+    df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
+    
+    df = df.Filter("jet_tlv.size() >= 2")
+    
+    results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
+    results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
+    
+    #get probabilities
+    df = df.Define("recojet_isB_jet0", "recojet_isB[0]")
+    df = df.Define("recojet_isB_jet1", "recojet_isB[1]")
+    
+    #########
+    ### CUT 4 :cut on B quark probabilities
+    #########
+    
+    #Make Graphs
+    results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
+    results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
+    
+    df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 > 0.95")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
+    
+    
+    #Do direct Higgs Mass reconstruction
+    df = df.Define("jet0", "jet_tlv[0]")
+    df = df.Define("jet1", "jet_tlv[1]")
+    df = df.Define("dijet", "jet0 + jet1")
+    df = df.Define("dijet_higgs_m_reco", "dijet.M()")
+    df = df.Define("dijet_higgs_p_reco", "dijet.P()")
 
-    df = df.Define("clustered_jets", "JetClustering::clustering_ee_kt(2, 2, 1, 0)(pseudo_jets)")
-    df = df.Define("jets", "FCCAnalyses::JetClusteringUtils::get_pseudoJets(clustered_jets)")
-    df = df.Define("jetconstituents", "FCCAnalyses::JetClusteringUtils::get_constituents(clustered_jets)")
-    df = df.Define("jets_e", "FCCAnalyses::JetClusteringUtils::get_e(jets)")
-    df = df.Define("jets_px", "FCCAnalyses::JetClusteringUtils::get_px(jets)")
-    df = df.Define("jets_py", "FCCAnalyses::JetClusteringUtils::get_py(jets)")
-    df = df.Define("jets_pz", "FCCAnalyses::JetClusteringUtils::get_pz(jets)")
-    df = df.Define("jets_m", "FCCAnalyses::JetClusteringUtils::get_m(jets)")
 
-    df = df.Define("jet1", "ROOT::Math::PxPyPzEVector(jets_px[0], jets_py[0], jets_pz[0], jets_e[0])")
-    df = df.Define("jet2", "ROOT::Math::PxPyPzEVector(jets_px[1], jets_py[1], jets_pz[1], jets_e[1])")
-    df = df.Define("jet1_p", "jet1.P()")
-    df = df.Define("jet2_p", "jet2.P()")
-    df = df.Define("dijet", "jet1+jet2")
-    df = df.Define("dijet_tlv", "TLorentzVector ret; ret.SetPxPyPzE(dijet.Px(), dijet.Py(), dijet.Pz(), dijet.E()); return ret;")
-    df = df.Define("dijet_m", "dijet.M()")
-    df = df.Define("dijet_p", "dijet.P()")
+    #########
+    ### CUT 5: Higgs mass cut
+    #########
+    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
+    results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
+
+    df = df.Filter("dijet_higgs_m_reco < 130 && dijet_higgs_m_reco > 120")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut5"))
     
-    
-    results.append(df.Histo1D(("hqq_m", "", *bins_m), "dijet_m"))
-    
-    
+
+    # compare with jet-truth analysis
+    df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, ReconstructedParticles, Particle, MCRecoAssociations1)")
+    df = df.Define("njets", f"{njets}")
+    df = df.Define("jets_higgs_mc", "FCCAnalyses::Vec_i res; for(int i=0;i<njets;i++) if(abs(jets_mc[i])==5) res.push_back(i); return res;") # assume H->bb
+    df = df.Filter("jets_higgs_mc.size()==2")
+    df = df.Define("dijet_higgs_m_mc", "(jet_tlv[jets_higgs_mc[0]]+jet_tlv[jets_higgs_mc[1]]).M()")
 
     return results, weightsum
 
