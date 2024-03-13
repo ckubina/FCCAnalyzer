@@ -51,7 +51,7 @@ bins_dR = (1000, 0, 10)
 
 #jet clustering applications
 njets = 2 # number of jets to be clustered
-jetClusteringHelper2 = helper_jetclustering.ExclusiveJetClusteringHelper(njets, collection="ReconstructedParticles")
+jetClusteringHelper2 = helper_jetclustering.ExclusiveJetClusteringHelper(njets, collection="rps_no_electrons")
 jetFlavourHelper = helper_flavourtagger.JetFlavourHelper(jetClusteringHelper2.jets, jetClusteringHelper2.constituents)
 path = "data/flavourtagger/fccee_flavtagging_edm4hep_wc_v1"
 jetFlavourHelper.load(f"{path}.json", f"{path}.onnx")
