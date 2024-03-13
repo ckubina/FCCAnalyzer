@@ -272,10 +272,6 @@ def build_graph(df, dataset):
     df = df.Define("jet0_p", "jet0.P()")
     df = df.Define("jet1_p", "jet1.P()")
     df = df.Define("dijet", "jet0 + jet1")
-<<<<<<< HEAD
-    df = df.Define("dijet_higgs_m_reco", "dijet.M()")
-=======
->>>>>>> 800ec6bab83aa3ab203ffc635c36d27609453de1
     # df = df.Define("dijet_higgs_m_reco", "dijet.M()")
     df = df.Define("dijet_higgs_m_reco", "cout << dijet.M() << endl; return 100;")
     df = df.Define("dijet_higgs_p_reco", "dijet.P()")
