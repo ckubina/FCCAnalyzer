@@ -272,7 +272,8 @@ def build_graph(df, dataset):
     df = df.Define("jet0_p", "jet0.P()")
     df = df.Define("jet1_p", "jet1.P()")
     df = df.Define("dijet", "jet0 + jet1")
-    df = df.Define("dijet_higgs_m_reco", "dijet.M()")
+    # df = df.Define("dijet_higgs_m_reco", "dijet.M()")
+    df = df.Define("dijet_higgs_m_reco", "cout << dijet.M() << endl; return 100;")
     df = df.Define("dijet_higgs_p_reco", "dijet.P()")
     results.append(df.Histo1D(("jet0_mass", "", *bins_p), "jet0_mass")) #reconstructed higgs mass
     results.append(df.Histo1D(("jet1_mass", "", *bins_p), "jet1_mass"))
