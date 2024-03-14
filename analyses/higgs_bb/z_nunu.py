@@ -223,7 +223,7 @@ if __name__ == "__main__":
     datadict = functions.get_datadicts() # get default datasets
 
     datasets_sig = ["wzp6_ee_nunuH_Hbb_ecm240", "wzp6_ee_eeH_Hbb_ecm240", "wzp6_ee_tautauH_Hbb_ecm240", "wzp6_ee_ccH_Hbb_ecm240", "wzp6_ee_mumuH_Hbb_ecm240", "wzp6_ee_qqH_Hbb_ecm240", "wzp6_ee_ssH_Hbb_ecm240", "wzp6_ee_bbH_Hbb_ecm240"]
-    datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240"]
+    datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240", "wzp6_ee_nunuH_Hcc_ecm240", wzp6_ee_nunuH_Hss_ecm240]
     datasets_to_run = datasets_sig + datasets_bkg
 
     functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_bb_nunu_40GeV_flavourtag.root", args, norm=True, lumi=7200000)
