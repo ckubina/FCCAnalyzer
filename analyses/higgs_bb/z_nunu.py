@@ -129,7 +129,7 @@ def build_graph(df, dataset):
     ### CUT 1: veto electrons and muons
     #########
     df = df.Filter("electrons_no == 0")
-    df = df.Filter("muons_no ==0")
+    df = df.Filter("muons_no == 0")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut1"))
 
 
@@ -149,7 +149,7 @@ def build_graph(df, dataset):
     ## CUT 3: missing energy
     ####
     results.append(df.Histo1D(("missingEnergy_nOne", "", *bins_m), "missingEnergy"))
-    df = df.Filter("missingEnergy > 65 && missingEnergy < 115")
+    df = df.Filter("missingEnergy > 75 && missingEnergy < 125")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
 
 
@@ -204,7 +204,7 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
     results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
 
-    df = df.Filter("dijet_higgs_m_reco < 130 && dijet_higgs_m_reco > 120")
+    df = df.Filter("dijet_higgs_m_reco < 130 && dijet_higgs_m_reco > 115")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut5"))
     
 
@@ -226,5 +226,5 @@ if __name__ == "__main__":
     datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240"]
     datasets_to_run = datasets_sig + datasets_bkg
 
-    functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_bb_nunu_40GeV_kkmcee.root", args, norm=True, lumi=7200000)
+    functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_bb_nunu_40GeV_flavourtag.root", args, norm=True, lumi=7200000)
 
