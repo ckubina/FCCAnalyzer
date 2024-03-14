@@ -262,16 +262,20 @@ def build_graph(df, dataset):
     
     df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 > 0.95")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
-    
-    
+
+    #########
+    ### CUT 10 :cut on dijet higgs reco
+    #########
     #Do direct Higgs Mass reconstruction
     df = df.Define("jet0", "jet_tlv[0]")
     df = df.Define("jet1", "jet_tlv[1]")
     df = df.Define("dijet", "jet0 + jet1")
     df = df.Define("dijet_higgs_m_reco", "dijet.M()")
     df = df.Define("dijet_higgs_p_reco", "dijet.P()")
-    
     results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
+    df = df.Filter("dijet_higgs_m_reco > 115 && dijet_higgs_m_reco < 130")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut10"))
+    
     results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
 
     # compare with jet-truth analysis
@@ -291,7 +295,7 @@ if __name__ == "__main__":
     datadict = functions.get_datadicts() # get default datasets
 
     datasets_sig = ["wzp6_ee_nunuH_Hbb_ecm240", "wzp6_ee_mumuH_Hbb_ecm240", "wzp6_ee_tautauH_Hbb_ecm240", "wzp6_ee_ccH_Hbb_ecm240", "wzp6_ee_eeH_Hbb_ecm240", "wzp6_ee_qqH_Hbb_ecm240", "wzp6_ee_ssH_Hbb_ecm240", "wzp6_ee_bbH_Hbb_ecm240"]
-    datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240"]
+    datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240", "wzp6_ee_eeH_Hcc_ecm240", "wzp6_ee_eeH_Hss_ecm240"]
     datasets_to_run = datasets_sig + datasets_bkg
 
     functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_bb_ee_40GeV_flavourtag.root", args, norm=True, lumi=7200000)
