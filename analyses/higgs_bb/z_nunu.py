@@ -215,6 +215,8 @@ def build_graph(df, dataset):
     df = df.Filter("jets_higgs_mc.size()==2")
     df = df.Define("dijet_higgs_m_mc", "(jet_tlv[jets_higgs_mc[0]]+jet_tlv[jets_higgs_mc[1]]).M()")
 
+    results.append(df.Histo1D(("dijet_higgs_m_mc", "", *bins_m), "dijet_higgs_m_reco"))
+
     return results, weightsum
 
 
