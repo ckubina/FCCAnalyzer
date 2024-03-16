@@ -172,8 +172,8 @@ def build_graph(df, dataset):
                     }
             return min;""")
   
-    df = df.Define("reco_h_jet", "jet_tlv[jet_indx[0]]+jet_tlv[jet_indx[1]]")
-    df = df.Define("reco_z_jet", "jet_tlv[jet_indx[2]]+jet_tlv[jet_indx[3]]")
+    df = df.Define(df.Histo1D("reco_h_jet", "jet_tlv[jet_indx[0]]+jet_tlv[jet_indx[1]]"))
+    df = df.Define(df.Histo1D("reco_z_jet", "jet_tlv[jet_indx[2]]+jet_tlv[jet_indx[3]]"))
 
     ##add z and h momentum cuts
     df = df.Define("z_p_reco", "reco_z_jet.P()")
