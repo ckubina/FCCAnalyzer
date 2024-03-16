@@ -189,7 +189,7 @@ def build_graph(df, dataset):
     df = df.Define("h_p_reco", "reco_h_jet.P()")
     results.append(df.Histo1D(("h_p_reco", "", *bins_p), "h_p_reco"))
     df = df.Filter("h_p_reco < 62 && h_p_reco > 25")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
   
     #####
     ## CUT 5: Make cut on Z mass
