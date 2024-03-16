@@ -153,7 +153,7 @@ def build_graph(df, dataset):
 
     # pair jets based on distance to Z and H masses
     #I copied this from Jake because idk how to do it otherwise.
-    df_quarks = df_quarks.Define("jet_indx", """
+    df = df.Define("jet_indx", """
             FCCAnalyses::Vec_i min{0, 0, 0, 0};
             float distm = INFINITY;
             for (int i = 0; i < 3; i++)
