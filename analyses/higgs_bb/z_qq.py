@@ -178,8 +178,8 @@ def build_graph(df, dataset):
     ##add z and h momentum cuts
     df = df.Define("z_p_reco", "reco_z_jet.P()")
     df = df.Define("h_p_reco", "reco_h_jet.P()")
-    results.append(("z_p_reco", "", *bins_p), z_p_reco)
-    results.append(("h_p_reco", "", *bins_p), h_p_reco)
+    results.append(("z_p_reco", "", *bins_p), "z_p_reco")
+    results.append(("h_p_reco", "", *bins_p), "h_p_reco")
   
     #####
     ## CUT 3: Make cut on Z mass
