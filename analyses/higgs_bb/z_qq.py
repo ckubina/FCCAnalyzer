@@ -135,6 +135,9 @@ def build_graph(df, dataset):
     ####
     ## CUT 2: missing energy
     ####
+    df = df.Define("missingEnergy_rp", "FCCAnalyses::missingEnergy(240., ReconstructedParticles)")
+    df = df.Define("missingEnergy_rp_tlv", "FCCAnalyses::makeLorentzVectors(missingEnergy_rp)")
+    df = df.Define("missingEnergy", "missingEnergy_rp[0].energy")
     results.append(df.Histo1D(("missingEnergy_nOne", "", *bins_m), "missingEnergy"))
     df = df.Filter("missingEnergy < 30")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut2"))
