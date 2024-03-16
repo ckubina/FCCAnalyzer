@@ -267,25 +267,25 @@ def build_graph(df, dataset):
     ### CUT 10 :cut on dijet higgs reco
     #########
     #Do direct Higgs Mass reconstruction
-    df = df.Define("jet0", "jet_tlv[0]")
-    df = df.Define("jet1", "jet_tlv[1]")
-    df = df.Define("dijet", "jet0 + jet1")
-    df = df.Define("dijet_higgs_m_reco", "dijet.M()")
-    df = df.Define("dijet_higgs_p_reco", "dijet.P()")
-    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
-    df = df.Filter("dijet_higgs_m_reco > 115 && dijet_higgs_m_reco < 130")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut10"))
+    # df = df.Define("jet0", "jet_tlv[0]")
+    # df = df.Define("jet1", "jet_tlv[1]")
+    # df = df.Define("dijet", "jet0 + jet1")
+    # df = df.Define("dijet_higgs_m_reco", "dijet.M()")
+    # df = df.Define("dijet_higgs_p_reco", "dijet.P()")
+    # results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
+    # df = df.Filter("dijet_higgs_m_reco > 115 && dijet_higgs_m_reco < 130")
+    # results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut10"))
     
-    results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
+    # results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
 
-    # compare with jet-truth analysis
-    df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, rps_no_electrons, Particle, MCRecoAssociations1)")
-    df = df.Define("njets", f"{njets}")
-    df = df.Define("jets_higgs_mc", "FCCAnalyses::Vec_i res; for(int i=0;i<njets;i++) if(abs(jets_mc[i])==5) res.push_back(i); return res;") # assume H->bb
-    df = df.Filter("jets_higgs_mc.size()==2")
-    df = df.Define("dijet_higgs_m_mc", "(jet_tlv[jets_higgs_mc[0]]+jet_tlv[jets_higgs_mc[1]]).M()")
+    # # compare with jet-truth analysis
+    # df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, rps_no_electrons, Particle, MCRecoAssociations1)")
+    # df = df.Define("njets", f"{njets}")
+    # df = df.Define("jets_higgs_mc", "FCCAnalyses::Vec_i res; for(int i=0;i<njets;i++) if(abs(jets_mc[i])==5) res.push_back(i); return res;") # assume H->bb
+    # df = df.Filter("jets_higgs_mc.size()==2")
+    # df = df.Define("dijet_higgs_m_mc", "(jet_tlv[jets_higgs_mc[0]]+jet_tlv[jets_higgs_mc[1]]).M()")
 
-    results.append(df.Histo1D(("dijet_higgs_m_mc", "", *bins_p), "dijet_higgs_m_mc")) #monte carlo higgs mass
+    # results.append(df.Histo1D(("dijet_higgs_m_mc", "", *bins_p), "dijet_higgs_m_mc")) #monte carlo higgs mass
 
     return results, weightsum
 
