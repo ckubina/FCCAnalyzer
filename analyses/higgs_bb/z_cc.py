@@ -175,6 +175,9 @@ def build_graph(df, dataset):
     df = df.Define("reco_z_jet", "jet_tlv[jet_indx[0]]+jet_tlv[jet_indx[1]]")
     df = df.Define("reco_h_jet", "jet_tlv[jet_indx[2]]+jet_tlv[jet_indx[3]]")
 
+    results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
+    results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
+
     ######
     ##CUT 3: Z momentum cut
     ######
@@ -200,12 +203,22 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut5"))
 
     #####
+    ## CUT 6: Make cut on C-quark probabilities
+    #####
+    df = df.Define("recojet_isC_jet0", "recojet_isC[jet_indx[0]]")
+    df = df.Define("recojet_isC_jet1", "recojet_isC[jet_indx[1]]")
+    results.append(df.Histo1D(("recojet_isC_jet0", "", *bins_score), "recojet_isC_jet0"))
+    results.append(df.Histo1D(("recojet_isC_jet1", "", *bins_score), "recojet_isC_jet1"))
+    df = df.Filter("recojet_isC_jet0 > 0.95 && recojet_isC_jet1 > 0.95")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
+    
+    #####
     ## CUT 6: Make cut on H mass
     #####
     df = df.Define("h_m_reco", "reco_h_jet.M()")
     results.append(df.Histo1D(("h_m_reco", "", *bins_m), "h_m_reco"))
     df = df.Filter("h_m_reco < 130 && h_m_reco > 115")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut7"))
 
 
     #####
@@ -216,12 +229,7 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
     df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 > 0.95")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut7"))
-    
-    results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
-    results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
-
-    ##Add what the z mass decayed into
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut8"))
 
     return results, weightsum
 
