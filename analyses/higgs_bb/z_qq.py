@@ -175,38 +175,48 @@ def build_graph(df, dataset):
     df = df.Define("reco_z_jet", "jet_tlv[jet_indx[0]]+jet_tlv[jet_indx[1]]")
     df = df.Define("reco_h_jet", "jet_tlv[jet_indx[2]]+jet_tlv[jet_indx[3]]")
 
-    ##add z and h momentum cuts
+    ######
+    ##CUT 3: Z momentum cut
+    ######
     df = df.Define("z_p_reco", "reco_z_jet.P()")
-    df = df.Define("h_p_reco", "reco_h_jet.P()")
     results.append(df.Histo1D(("z_p_reco", "", *bins_p), "z_p_reco"))
+    df = df.Filter("z_p_reco < 62 && z_p_reco > 25")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
+    
+    ######
+    ##CUT 4: H momentum cut
+    ######
+    df = df.Define("h_p_reco", "reco_h_jet.P()")
     results.append(df.Histo1D(("h_p_reco", "", *bins_p), "h_p_reco"))
+    df = df.Filter("h_p_reco < 62 && h_p_reco > 25")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
   
     #####
-    ## CUT 3: Make cut on Z mass
+    ## CUT 5: Make cut on Z mass
     #####
     df = df.Define("z_m_reco", "reco_z_jet.M()")
     results.append(df.Histo1D(("z_m_reco", "", *bins_m), "z_m_reco"))
     df = df.Filter("z_m_reco < 100 && z_m_reco > 85")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut5"))
 
     #####
-    ## CUT 4: Make cut on H mass
+    ## CUT 6: Make cut on H mass
     #####
     df = df.Define("h_m_reco", "reco_h_jet.M()")
     results.append(df.Histo1D(("h_m_reco", "", *bins_m), "h_m_reco"))
     df = df.Filter("h_m_reco < 130 && h_m_reco > 115")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut4"))
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
 
 
     #####
-    ## CUT 5: Make cut on B-quark probabilities
+    ## CUT 7: Make cut on B-quark probabilities
     #####
     df = df.Define("recojet_isB_jet0", "recojet_isB[jet_indx[2]]")
     df = df.Define("recojet_isB_jet1", "recojet_isB[jet_indx[3]]")
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
     df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 > 0.95")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut5"))
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut7"))
     
     results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
     results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
