@@ -243,5 +243,5 @@ if __name__ == "__main__":
     datasets_bkg = ["p8_ee_WW_ecm240", "p8_ee_ZZ_ecm240", "wzp6_ee_eeH_Hcc_ecm240", "wzp6_ee_eeH_Hss_ecm240"]
     datasets_to_run = datasets_sig + datasets_bkg
 
-    functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_bb_cc_40GeV_flavourtag.root", args, norm=True, lumi=7200000)
+    functions.build_and_run(datadict, datasets_to_run, build_graph, f"output_h_bb_ss_40GeV_flavourtag.root", args, norm=True, lumi=7200000)
 
