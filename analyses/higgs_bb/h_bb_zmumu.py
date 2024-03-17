@@ -264,11 +264,10 @@ def build_graph(df, dataset):
     #Make Graphs
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
-    probabilities=np.linspace(0.7, 1, 10)
+    probabilities=np.linspace(0.7, 1, 20)
     for i, probability in enumerate(probabilities):
-        index=i+9
         df = df.Filter(f"recojet_isB_jet0 > {probability} && recojet_isB_jet1 > {probability}")
-        results.append(df.Histo1D((f"b_prob_{probability}", "", *bins_prob), f"cut{index}"))
+        results.append(df.Histo1D((f"b_prob_{probability}", "", *bins_count), f"cut{i}"))
     
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
 
