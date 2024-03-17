@@ -210,7 +210,7 @@ def build_graph(df, dataset):
     df = df.Define("recojet_isS_jet1", "recojet_isS[jet_indx[1]]")
     results.append(df.Histo1D(("recojet_isS_jet0", "", *bins_score), "recojet_isS_jet0"))
     results.append(df.Histo1D(("recojet_isS_jet1", "", *bins_score), "recojet_isS_jet1"))
-    df = df.Filter("recojet_isC_jet0 > 0.95 && recojet_isC_jet1 > 0.95")
+    df = df.Filter("recojet_isS_jet0 > 0.95 && recojet_isS_jet1 > 0.95")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut6"))
     
     #####
