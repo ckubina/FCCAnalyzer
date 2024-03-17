@@ -5,6 +5,7 @@ import helpers
 import ROOT
 import argparse
 import logging
+import numpy as np
 
 import helper_jetclustering
 import helper_flavourtagger
@@ -263,8 +264,12 @@ def build_graph(df, dataset):
     #Make Graphs
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
-
-    df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 >0.95")
+    probabilites=np.linspace(0.7, 1, 10)
+    for i, probability in enumerate(probabilities):
+        index=i+9
+        df = df.Filter("recojet_isB_jet0 > {probability} && recojet_isB_jet1 > {probability}")
+        results.append(df.Histo1D(("b_prob_{probability}, "", *bins_prob), "cut{index}"))
+    
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
 
     #Do direct Higgs Mass reconstruction
