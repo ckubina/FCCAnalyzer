@@ -260,7 +260,11 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
     
-    df = df.Filter("recojet_isB_jet0 > 0.5 && recojet_isB_jet1 > 0.5")
+    probabilities=np.linspace(0.3, 0.7, 20)
+    for i, probability in enumerate(probabilities):
+        df = df.Filter(f"recojet_isB_jet0 > {probability} && recojet_isB_jet1 > {probability}")
+        results.append(df.Histo1D((f"b_prob_{i}", "", *bins_count), f"cut{i}"))
+    
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
 
     #Do direct Higgs Mass reconstruction
