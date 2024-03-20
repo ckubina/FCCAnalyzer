@@ -4,6 +4,7 @@ import helpers
 import ROOT
 import argparse
 import logging
+import numpy as np
 
 import helper_jetclustering
 import helper_flavourtagger
