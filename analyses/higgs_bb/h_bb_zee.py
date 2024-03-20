@@ -236,27 +236,6 @@ def build_graph(df, dataset):
 
     results.append(df.Histo1D(("acoplanarity", "", *bins_aco), "acoplanarity"))
     results.append(df.Histo1D(("acolinearity", "", *bins_aco), "acolinearity"))
-
-
-    # define PF candidates collection by removing the electrons
-    df = df.Define("rps_no_electrons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, electrons)")
-    # df = df.Define("RP_px", "FCCAnalyses::ReconstructedParticle::get_px(rps_no_electrons)")
-    # df = df.Define("RP_py", "FCCAnalyses::ReconstructedParticle::get_py(rps_no_electrons)")
-    # df = df.Define("RP_pz","FCCAnalyses::ReconstructedParticle::get_pz(rps_no_electrons)")
-    # df = df.Define("RP_e", "FCCAnalyses::ReconstructedParticle::get_e(rps_no_electrons)")
-    # df = df.Define("RP_m", "FCCAnalyses::ReconstructedParticle::get_mass(rps_no_electrons)")
-    # df = df.Define("RP_q", "FCCAnalyses::ReconstructedParticle::get_charge(rps_no_electrons)")
-    # df = df.Define("pseudo_jets", "FCCAnalyses::JetClusteringUtils::set_pseudoJets(RP_px, RP_py, RP_pz, RP_e)")
-
-    #coment out old jet clustering
-    # df = df.Define("clustered_jets", "JetClustering::clustering_ee_kt(2, 2, 1, 0)(pseudo_jets)")
-    # df = df.Define("jets", "FCCAnalyses::JetClusteringUtils::get_pseudoJets(clustered_jets)")
-    # df = df.Define("jetconstituents", "FCCAnalyses::JetClusteringUtils::get_constituents(clustered_jets)")
-    # df = df.Define("jets_e", "FCCAnalyses::JetClusteringUtils::get_e(jets)")
-    # df = df.Define("jets_px", "FCCAnalyses::JetClusteringUtils::get_px(jets)")
-    # df = df.Define("jets_py", "FCCAnalyses::JetClusteringUtils::get_py(jets)")
-    # df = df.Define("jets_pz", "FCCAnalyses::JetClusteringUtils::get_pz(jets)")
-    # df = df.Define("jets_m", "FCCAnalyses::JetClusteringUtils::get_m(jets)")
     
     #get probabilities
     df = df.Define("recojet_isB_jet0", "recojet_isB[0]")
