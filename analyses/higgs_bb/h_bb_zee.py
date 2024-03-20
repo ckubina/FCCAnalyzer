@@ -260,7 +260,7 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
     
-    df = df.Filter("recojet_isB_jet0 > 0.95 && recojet_isB_jet1 > 0.95")
+    df = df.Filter("recojet_isB_jet0 > 0.5 && recojet_isB_jet1 > 0.5")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
 
     #Do direct Higgs Mass reconstruction
