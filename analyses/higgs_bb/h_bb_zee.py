@@ -161,6 +161,7 @@ def build_graph(df, dataset):
     ### CUT 3: recoil cut (H mass)
     #########
      #Flavour tagging and jet clustering
+    df = df.Define("rps_no_electrons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, electrons)")
     df = jetClusteringHelper2.define(df)
     df = jetFlavourHelper.define_and_inference(df)
     df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
