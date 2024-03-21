@@ -165,8 +165,8 @@ def build_graph(df, dataset):
                             if (i == l || j == l) continue;
                             float distz = (jet_tlv[i] + jet_tlv[j]).M() - 91.2;
                             float disth = (jet_tlv[k] + jet_tlv[l]).M() - 125;
-                            if (distz*distz + disth*disth < distm) {
-                                distm = distz*distz + disth*disth;
+                            if (distz*distz/91.2 + disth*disth/125 < distm) {
+                                distm = distz*distz/91.2 + disth*disth/125;
                                 min[0] = i; min[1] = j; min[2] = k; min[3] = l;
                             }
                         }
