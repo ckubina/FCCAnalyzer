@@ -160,28 +160,9 @@ def build_graph(df, dataset):
     #########
     ### CUT 3: recoil cut (H mass)
     #########
-     #Flavour tagging and jet clustering
-    df = df.Define("rps_no_electrons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, electrons)")
-    df = jetClusteringHelper2.define(df)
-    df = jetFlavourHelper.define_and_inference(df)
-    df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
-    
-    df = df.Filter("jet_tlv.size() >= 2")
-    
-    results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
-    results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
-
-    #Do direct Higgs Mass reconstruction
-    df = df.Define("jet0", "jet_tlv[0]")
-    df = df.Define("jet1", "jet_tlv[1]")
-    df = df.Define("dijet", "jet0 + jet1")
-    df = df.Define("dijet_higgs_m_reco", "dijet.M()")
-    df = df.Define("dijet_higgs_p_reco", "dijet.P()")
-    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
-    df = df.Filter("dijet_higgs_m_reco > 122 && dijet_higgs_m_reco < 127")
+    results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "zmumu_recoil_m"))
+    df = df.Filter("zmumu_recoil_m > 122 && zmumu_recoil_m < 127")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
-    
-    results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
 
     #####
     ### CUT 4: momentum
@@ -236,6 +217,32 @@ def build_graph(df, dataset):
 
     results.append(df.Histo1D(("acoplanarity", "", *bins_aco), "acoplanarity"))
     results.append(df.Histo1D(("acolinearity", "", *bins_aco), "acolinearity"))
+
+
+    
+    #Flavour tagging and jet clustering
+    df = df.Define("rps_no_electrons", "FCCAnalyses::ReconstructedParticle::remove(ReconstructedParticles, electrons)")
+    df = jetClusteringHelper2.define(df)
+    df = jetFlavourHelper.define_and_inference(df)
+    df = df.Define("jet_tlv", "FCCAnalyses::makeLorentzVectors(jet_px, jet_py, jet_pz, jet_e)")
+    
+    df = df.Filter("jet_tlv.size() >= 2")
+    
+    results.append(df.Histo1D(("jet_p", "", *bins_p), "jet_p"))
+    results.append(df.Histo1D(("jet_nconst", "", *(200, 0, 200)), "jet_nconst"))
+
+    #Do direct Higgs Mass reconstruction
+    df = df.Define("jet0", "jet_tlv[0]")
+    df = df.Define("jet1", "jet_tlv[1]")
+    df = df.Define("dijet", "jet0 + jet1")
+    df = df.Define("dijet_higgs_m_reco", "dijet.M()")
+    df = df.Define("dijet_higgs_p_reco", "dijet.P()")
+    results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
+    df = df.Filter("dijet_higgs_m_reco > 122 && dijet_higgs_m_reco < 127")
+    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
+    
+    results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
+
     
     #get probabilities
     df = df.Define("recojet_isB_jet0", "recojet_isB[0]")
@@ -249,12 +256,14 @@ def build_graph(df, dataset):
     results.append(df.Histo1D(("recojet_isB_jet0", "", *bins_score), "recojet_isB_jet0"))
     results.append(df.Histo1D(("recojet_isB_jet1", "", *bins_score), "recojet_isB_jet1"))
     
-    probabilities=np.linspace(0, 1, 20)
-    for i, probability in enumerate(probabilities):
-        df = df.Filter(f"recojet_isB_jet0 > {probability} && recojet_isB_jet1 > {probability}")
-        results.append(df.Histo1D((f"b_prob_{i}", "", *bins_count), f"cut{i}"))
-    
+    # probabilities=np.linspace(0, 1, 20)
+    # for i, probability in enumerate(probabilities):
+    #     df = df.Filter(f"recojet_isB_jet0 > {probability} && recojet_isB_jet1 > {probability}")
+    #     results.append(df.Histo1D((f"b_prob_{i}", "", *bins_count), f"cut{i}"))
+
+    df = df.Filter(f"recojet_isB_jet0 > 0.5 && recojet_isB_jet1 > 0.5")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut9"))
+    
 
     # compare with jet-truth analysis
     df = df.Define("jets_mc", "FCCAnalyses::jetTruthFinder(_jetc, rps_no_electrons, Particle, MCRecoAssociations1)")
