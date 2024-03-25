@@ -238,9 +238,6 @@ def build_graph(df, dataset):
     df = df.Define("dijet_higgs_m_reco", "dijet.M()")
     df = df.Define("dijet_higgs_p_reco", "dijet.P()")
     results.append(df.Histo1D(("dijet_higgs_m_reco", "", *bins_m), "dijet_higgs_m_reco"))
-    df = df.Filter("dijet_higgs_m_reco > 122 && dijet_higgs_m_reco < 127")
-    results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
-    
     results.append(df.Histo1D(("dijet_higgs_p_reco", "", *bins_p), "dijet_higgs_p_reco"))
 
     
