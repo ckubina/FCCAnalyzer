@@ -160,8 +160,8 @@ def build_graph(df, dataset):
     #########
     ### CUT 3: recoil cut (H mass)
     #########
-    results.append(df.Histo1D(("mumu_recoil_m_nOne", "", *bins_m), "zmumu_recoil_m"))
-    df = df.Filter("zmumu_recoil_m > 122 && zmumu_recoil_m < 127")
+    results.append(df.Histo1D(("ee_recoil_m_nOne", "", *bins_m), "zee_recoil_m"))
+    df = df.Filter("zee_recoil_m > 122 && zee_recoil_m < 127")
     results.append(df.Histo1D(("cutFlow", "", *bins_count), "cut3"))
 
     #####
